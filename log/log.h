@@ -23,20 +23,18 @@
         ofstream fout;
 
         Logging() {
-            fout = ofstream(string(FILE_NAME) + "." + EXTENSION);
-
-            cout << "construct\n";
-            remove(((string)OLD_LOG + "." + EXTENSION).c_str());
-
-            int i = 1;
-            while (i>0) {
-                i = rename(((string)FILE_NAME + "." + EXTENSION).c_str(),
-                    ((string)OLD_LOG + "." + EXTENSION).c_str());
-                cout << i;
-            };
+            string fileNew = (string(FILE_NAME) + "." + EXTENSION);
+            string fileOld = (string(OLD_LOG)   + "." + EXTENSION);
+            
+            int i = remove(fileOld.c_str());
+            int j = rename(fileNew.c_str(), fileOld.c_str());
+            /*if (j != 0) {
+                cout << i << j;
+                _getch();
+            }*/
+            fout = ofstream(fileNew);
         }
         ~Logging() {
-            cout << "destruct\n";
             fout.close();
         }
         Logging(const Logging&) = delete;
