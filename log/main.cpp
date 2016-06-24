@@ -7,25 +7,28 @@
 
 using namespace std;
 
-void foo(int x) {
-    for (int i = 0; i < x; ++i) {
-        outlog("f2: ", i, "    ", "more text");
-        //_sleep(5);
+void foo(int y, int x) {
+    for (int i = 0; i < y; ++i) {
+        char *str = " <string> ";
+        outlog("thread: ", x, " iteration: ", i, ' ', str, 1234112312*i*x, " bool: ", (bool)((i*x)%2), "  ", 24.234234*x*i);
     }
 }
 
 int main() {
 
-    int cout = 100;
-    thread first(foo, cout);
-    //thread second(foo, cout);
-    //outlog("SDf");
-    for (int i = 0; i < cout; ++i) {
-        outlog("f1: ", i , "    ", "more text");
-        //_sleep(5);
-    }
-    first.join();
+    int cout = 10000;
+    thread th1(foo, cout, 1);
+    thread th2(foo, cout, 2);
+    thread th3(foo, cout, 3);
+    thread th4(foo, cout, 4);
+    thread th5(foo, cout, 5);
+    foo(cout, 0);
 
-    //_getch();
+    th1.join();
+    th2.join();
+    th3.join();
+    th4.join();
+    th5.join();
+
     return 0;
 }

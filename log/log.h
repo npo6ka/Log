@@ -21,8 +21,18 @@
 
         ofstream fout;
 
-        Logging();
-        ~Logging();
+        Logging() {
+            string fileNew = (string(FILE_NAME) + "." + EXTENSION);
+            string fileOld = (string(OLD_LOG) + "." + EXTENSION);
+
+            int i = remove(fileOld.c_str());
+            int j = rename(fileNew.c_str(), fileOld.c_str());
+
+            fout = ofstream(fileNew);
+        }
+        ~Logging() {
+            fout.close();
+        }
         Logging(const Logging&) = delete;
         Logging& operator=(const Logging&) = delete;
 
@@ -59,10 +69,13 @@
         }
 
         #if SIX_DECIMAL_PLACES
-        inline void putStream(stringstream *st, const float arg);
-        inline void putStream(stringstream *st, const double arg);
+        inline void putStream(stringstream *st, const float arg){
+            *st << to_string(arg);
+        }
+        inline void putStream(stringstream *st, const double arg){
+            *st << to_string(arg);
+        }
         #endif
-    public:
         static Logging& getInstance() {
             static Logging instance;
             return instance;
@@ -77,6 +90,3 @@
     template<typename ... Arguments>
     void outlog(Arguments&& ... args) {}
 #endif
-
-
-

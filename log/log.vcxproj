@@ -72,7 +72,6 @@
     <ClInclude Include="log.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="log.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
