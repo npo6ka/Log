@@ -17,13 +17,15 @@ void foo(int x) {
 int main() {
 
     int cout = 100;
-    //thread first(foo, cout);
-    outlog("SDf");
+    thread first(foo, cout);
+    //thread second(foo, cout);
+    //outlog("SDf");
     for (int i = 0; i < cout; ++i) {
         outlog("f1: ", i , "    ", "more text");
         //_sleep(5);
     }
-    /*first.join();*/
+    first.join();
+    
 
     //_getch();
     return 0;

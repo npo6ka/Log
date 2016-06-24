@@ -20,27 +20,35 @@
         template<typename ... Arguments>
         friend void outlog(Arguments&& ... args);
 
+        ofstream fout;
+
         Logging() {
+            fout = ofstream(string(FILE_NAME) + "." + EXTENSION);
+
+            cout << "construct\n";
             remove(((string)OLD_LOG + "." + EXTENSION).c_str());
-            rename(((string)FILE_NAME + "." + EXTENSION).c_str(),
-                ((string)OLD_LOG + "." + EXTENSION).c_str());
+
+            int i = 1;
+            while (i>0) {
+                i = rename(((string)FILE_NAME + "." + EXTENSION).c_str(),
+                    ((string)OLD_LOG + "." + EXTENSION).c_str());
+                cout << i;
+            };
         }
         ~Logging() {
-            getStream()->close();
+            cout << "destruct\n";
+            fout.close();
         }
         Logging(const Logging&) = delete;
         Logging& operator=(const Logging&) = delete;
-
-        ofstream* getStream() {
-            static ofstream *fout = new ofstream("1.dfs");//(string(FILE_NAME) + "." + EXTENSION);
-            return fout;
-        }
 
         template<typename ... Arguments>
         void outLog(Arguments&& ... args) {
             stringstream *stream = new stringstream();
             shapeString(stream, args...);
-            *getStream() << stream->str() + "\n";
+
+            fout << stream->str() + "\n";
+
             delete stream;
         }
 
@@ -76,12 +84,16 @@
             *st << to_string(arg);
         }
         #endif
-
+    public:
+        static Logging& getInstance() {
+            static Logging instance;
+            return instance;
+        }
     };
+
     template<typename ... Arguments>
     void outlog(Arguments&& ... args) {
-        static Logging log;
-        log.outLog(args...);
+        Logging::getInstance().outLog(args...);
     }
 #else
     template<typename ... Arguments>
