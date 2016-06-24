@@ -1,6 +1,12 @@
 #pragma once
 #define LOG_ENABLED 1
 
+#define FILE_NAME "progLog"
+#define OLD_LOG "previousLog"
+#define EXTENSION "log"
+
+#define BOOL_TO_WORD 0;       // 0 - false, other - true
+#define SIX_DECIMAL_PLACES 1; // for double and float format
 
 #if LOG_ENABLED
     #include <fstream>
@@ -9,34 +15,14 @@
 
     using namespace std;
 
-    #define FILE_NAME "progLog"
-    #define OLD_LOG "previousLog"
-    #define EXTENSION "log"
-    
-    #define BOOL_TO_WORD 0;       // 0 - false, other - true
-    #define SIX_DECIMAL_PLACES 1; // for double and float format
-
     class Logging {
         template<typename ... Arguments>
         friend void outlog(Arguments&& ... args);
 
         ofstream fout;
 
-        Logging() {
-            string fileNew = (string(FILE_NAME) + "." + EXTENSION);
-            string fileOld = (string(OLD_LOG)   + "." + EXTENSION);
-            
-            int i = remove(fileOld.c_str());
-            int j = rename(fileNew.c_str(), fileOld.c_str());
-            /*if (j != 0) {
-                cout << i << j;
-                _getch();
-            }*/
-            fout = ofstream(fileNew);
-        }
-        ~Logging() {
-            fout.close();
-        }
+        Logging();
+        ~Logging();
         Logging(const Logging&) = delete;
         Logging& operator=(const Logging&) = delete;
 
@@ -44,9 +30,7 @@
         void outLog(Arguments&& ... args) {
             stringstream *stream = new stringstream();
             shapeString(stream, args...);
-
             fout << stream->str() + "\n";
-
             delete stream;
         }
 
@@ -75,12 +59,8 @@
         }
 
         #if SIX_DECIMAL_PLACES
-        inline void putStream(stringstream *st, const float arg) {
-            *st << to_string(arg);
-        }
-        inline void putStream(stringstream *st, const double arg) {
-            *st << to_string(arg);
-        }
+        inline void putStream(stringstream *st, const float arg);
+        inline void putStream(stringstream *st, const double arg);
         #endif
     public:
         static Logging& getInstance() {

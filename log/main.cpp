@@ -25,7 +25,6 @@ int main() {
         //_sleep(5);
     }
     first.join();
-    
 
     //_getch();
     return 0;
